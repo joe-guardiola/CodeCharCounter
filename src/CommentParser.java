@@ -1,6 +1,9 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -30,8 +33,14 @@ public class CommentParser {
 		parent.setVisible(true);
 		
 		fileChooser = new JFileChooser();
+		fileChooser.setMultiSelectionEnabled(true);
 		int retVal = fileChooser.showOpenDialog(parent);
-		
+		File[] files = fileChooser.getSelectedFiles();
+		if(files.length >= 2) {
+		    //compare(readFileAsList(files[0]), readFileAsList(files[1]));
+			System.out.println(files[0]);
+			System.out.println(files[1]);
+		}
 		if(retVal == JFileChooser.APPROVE_OPTION) {
 			openedFile = fileChooser.getSelectedFile();
 		}
@@ -41,6 +50,20 @@ public class CommentParser {
 		analyzeText();
 		
 		printInfo();
+	}
+	
+	private static List<String> readFileAsList(File file) throws IOException {
+	    final List<String> ret = new ArrayList<String>();
+	    final BufferedReader br = new BufferedReader(new FileReader(file));
+	    try {
+	        String strLine;
+	        while ((strLine = br.readLine()) != null) {
+	            ret.add(strLine);
+	        }
+	        return ret;
+	    } finally {
+	        br.close();
+	    }
 	}
 	
 	public void analyzeText() {
